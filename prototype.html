@@ -830,13 +830,13 @@
               <div class="price" id="bil-price" data-field="bil" data-value="$35/mo">$35/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Property damage')">
+          <div class="coverage-item" onclick="openGenericModal('propDmg')">
             <div class="row-1">
               <div>
                 <div class="name">Property damage liability</div>
-                <div class="value">$10K <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="propDmg">$10K <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$40/mo">$40/mo</div>
+              <div class="price monthly-price" data-field="propDmg" data-value="$40/mo">$40/mo</div>
             </div>
           </div>
         </div>
@@ -850,40 +850,40 @@
         </div>
         <p class="coverage-sub">Coverage for you and your passengers.</p>
         <div class="coverage-card">
-          <div class="coverage-item" onclick="showToast('Edit PIP')">
+          <div class="coverage-item" onclick="openGenericModal('pipLimit')">
             <div class="row-1">
               <div>
                 <div class="name">Personal injury protection limit</div>
-                <div class="value">$250K <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="pipLimit">$250K <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="pipLimit" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit PIP deductible')">
+          <div class="coverage-item" onclick="openGenericModal('pipDed')">
             <div class="row-1">
               <div>
                 <div class="name">Personal injury protection deductible</div>
-                <div class="value">$500 <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="pipDed">$500 <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="pipDed" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit PIP Healthcare')">
+          <div class="coverage-item" onclick="openGenericModal('pipHealth')">
             <div class="row-1">
               <div>
                 <div class="name">PIP healthcare selection</div>
-                <div class="value">Full Benefits <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="pipHealth">Full Benefits <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$70/mo">$70/mo</div>
+              <div class="price monthly-price" data-field="pipHealth" data-value="$70/mo">$70/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit PIP Full Med')">
+          <div class="coverage-item" onclick="openGenericModal('pipFullMed')">
             <div class="row-1">
               <div>
                 <div class="name">PIP full med only</div>
-                <div class="value">Option 1 <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="pipFullMed">Option 1 <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$20/mo">$20/mo</div>
+              <div class="price monthly-price" data-field="pipFullMed" data-value="$20/mo">$20/mo</div>
             </div>
           </div>
           <div class="coverage-item" onclick="openExtraPipModal()">
@@ -895,40 +895,40 @@
               <div class="price" id="extra-pip-price" data-field="extraPip" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Medical payments')">
+          <div class="coverage-item" onclick="openGenericModal('medPay')">
             <div class="row-1">
               <div>
                 <div class="name">Medical payments</div>
-                <div class="value">$10K <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="medPay">$10K <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="medPay" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Tort threshold')">
+          <div class="coverage-item" onclick="openGenericModal('tort')">
             <div class="row-1">
               <div>
                 <div class="name">Tort threshold</div>
-                <div class="value">Limited <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="tort">Limited <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="tort" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit UM/UIM Bodily Injury')">
+          <div class="coverage-item" onclick="openGenericModal('umBil')">
             <div class="row-1">
               <div>
                 <div class="name">UM/UIM bodily injury</div>
-                <div class="value">$250K/$500K <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="umBil">$250K/$500K <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$30/mo">$30/mo</div>
+              <div class="price monthly-price" data-field="umBil" data-value="$30/mo">$30/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit UM/UIM Property Damage')">
+          <div class="coverage-item" onclick="openGenericModal('umPd')">
             <div class="row-1">
               <div>
                 <div class="name">UM/UIM property damage</div>
-                <div class="value">$50K <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="umPd">$50K <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="umPd" data-value="Included">Included</div>
             </div>
           </div>
         </div>
@@ -949,67 +949,67 @@
               <div class="vc-sub">Sport Utility Vehicle</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Comprehensive')">
+          <div class="coverage-item" onclick="openGenericModal('v1Comp')">
             <div class="row-1">
               <div>
                 <div class="name">Comprehensive</div>
-                <div class="value">$500 deductible <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v1Comp">$500 deductible <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$15/mo">$15/mo</div>
+              <div class="price monthly-price" data-field="v1Comp" data-value="$15/mo">$15/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Glass deductible')">
+          <div class="coverage-item" onclick="openGenericModal('v1Glass')">
             <div class="row-1">
               <div>
                 <div class="name">Glass deductible</div>
-                <div class="value">Comprehensive deductible <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v1Glass">Comprehensive deductible <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="v1Glass" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Collision')">
+          <div class="coverage-item" onclick="openGenericModal('v1Coll')">
             <div class="row-1">
               <div>
                 <div class="name">Collision</div>
-                <div class="value">$500 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v1Coll">$500 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$30/mo">$30/mo</div>
+              <div class="price monthly-price" data-field="v1Coll" data-value="$30/mo">$30/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Collision damage waiver')">
+          <div class="coverage-item" onclick="openGenericModal('v1Cdw')">
             <div class="row-1">
               <div>
                 <div class="name">Collision damage waiver</div>
-                <div class="value">$125 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v1Cdw">$125 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="v1Cdw" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Towing')">
+          <div class="coverage-item" onclick="openGenericModal('v1Tow')">
             <div class="row-1">
               <div>
                 <div class="name">Towing and labor</div>
-                <div class="value">$50 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v1Tow">$50 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="v1Tow" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Rental reimbursement')">
+          <div class="coverage-item" onclick="openGenericModal('v1Rental')">
             <div class="row-1">
               <div>
                 <div class="name">Rental reimbursement</div>
-                <div class="value">$40 per day/$1.2K Max <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v1Rental">$40 per day/$1.2K Max <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$20/mo">$20/mo</div>
+              <div class="price monthly-price" data-field="v1Rental" data-value="$20/mo">$20/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Loan/lease')">
+          <div class="coverage-item" onclick="openGenericModal('v1LoanLease')">
             <div class="row-1">
               <div>
                 <div class="name">Loan/lease gap coverage</div>
-                <div class="value">Included <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v1LoanLease">Included <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="v1LoanLease" data-value="Included">Included</div>
             </div>
           </div>
         </div>
@@ -1022,67 +1022,67 @@
               <div class="vc-sub">Sedan</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Comprehensive')">
+          <div class="coverage-item" onclick="openGenericModal('v2Comp')">
             <div class="row-1">
               <div>
                 <div class="name">Comprehensive</div>
-                <div class="value">$500 deductible <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v2Comp">$500 deductible <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$12/mo">$12/mo</div>
+              <div class="price monthly-price" data-field="v2Comp" data-value="$12/mo">$12/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Glass deductible')">
+          <div class="coverage-item" onclick="openGenericModal('v2Glass')">
             <div class="row-1">
               <div>
                 <div class="name">Glass deductible</div>
-                <div class="value">Comprehensive deductible <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v2Glass">Comprehensive deductible <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="v2Glass" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Collision')">
+          <div class="coverage-item" onclick="openGenericModal('v2Coll')">
             <div class="row-1">
               <div>
                 <div class="name">Collision</div>
-                <div class="value">$500 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v2Coll">$500 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$25/mo">$25/mo</div>
+              <div class="price monthly-price" data-field="v2Coll" data-value="$25/mo">$25/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Collision damage waiver')">
+          <div class="coverage-item" onclick="openGenericModal('v2Cdw')">
             <div class="row-1">
               <div>
                 <div class="name">Collision damage waiver</div>
-                <div class="value">$125 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v2Cdw">$125 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="v2Cdw" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Towing')">
+          <div class="coverage-item" onclick="openGenericModal('v2Tow')">
             <div class="row-1">
               <div>
                 <div class="name">Towing and labor</div>
-                <div class="value">$50 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v2Tow">$50 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="v2Tow" data-value="Included">Included</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Rental reimbursement')">
+          <div class="coverage-item" onclick="openGenericModal('v2Rental')">
             <div class="row-1">
               <div>
                 <div class="name">Rental reimbursement</div>
-                <div class="value">$40 per day/$1.2K Max <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v2Rental">$40 per day/$1.2K Max <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price monthly-price" data-value="$15/mo">$15/mo</div>
+              <div class="price monthly-price" data-field="v2Rental" data-value="$15/mo">$15/mo</div>
             </div>
           </div>
-          <div class="coverage-item" onclick="showToast('Edit Loan/lease')">
+          <div class="coverage-item" onclick="openGenericModal('v2LoanLease')">
             <div class="row-1">
               <div>
                 <div class="name">Loan/lease gap coverage</div>
-                <div class="value">Included <i class="fa-solid fa-chevron-right chev"></i></div>
+                <div class="value" data-value-for="v2LoanLease">Included <i class="fa-solid fa-chevron-right chev"></i></div>
               </div>
-              <div class="price">Included</div>
+              <div class="price included" data-field="v2LoanLease" data-value="Included">Included</div>
             </div>
           </div>
         </div>
@@ -1193,6 +1193,26 @@
       <div class="em-actions">
         <button class="btn-primary disabled" id="pkg-save" onclick="savePkg()">Save changes</button>
         <button class="btn-secondary" onclick="closePkgModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generic Coverage (bottom sheet) — used for all other coverages -->
+  <div class="edit-modal" id="generic-modal" aria-hidden="true">
+    <div class="em-backdrop" onclick="closeGenericModal()"></div>
+    <div class="em-sheet" role="dialog" aria-label="Edit coverage">
+      <div class="em-grabber"></div>
+      <div class="em-header">
+        <h3 id="generic-title">Edit coverage</h3>
+        <button class="em-close" onclick="closeGenericModal()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p class="em-sub" id="generic-desc"></p>
+      <div class="em-body">
+        <div id="generic-options"></div>
+      </div>
+      <div class="em-actions">
+        <button class="btn-primary disabled" id="generic-save" onclick="saveGeneric()">Save changes</button>
+        <button class="btn-secondary" onclick="closeGenericModal()">Cancel</button>
       </div>
     </div>
   </div>
@@ -1329,7 +1349,17 @@
     hasCustom: false,
     customDelta: 0,
     pendingFields: new Set(),
+    generic: {
+      propDmg:'$10K', pipLimit:'$250K', pipDed:'$500', pipHealth:'Full Benefits', pipFullMed:'Option 1',
+      medPay:'$10K', tort:'Limited', umBil:'$250K/$500K', umPd:'$50K',
+      v1Comp:'$500 deductible', v1Glass:'Comprehensive deductible', v1Coll:'$500 Per Occurrence', v1Cdw:'$125 Per Occurrence',
+      v1Tow:'$50 Per Occurrence', v1Rental:'$40 per day/$1.2K Max', v1LoanLease:'Included',
+      v2Comp:'$500 deductible', v2Glass:'Comprehensive deductible', v2Coll:'$500 Per Occurrence', v2Cdw:'$125 Per Occurrence',
+      v2Tow:'$50 Per Occurrence', v2Rental:'$40 per day/$1.2K Max', v2LoanLease:'Included',
+    },
   };
+  state.genericOriginal = { ...state.generic };
+  state.genericSaved   = { ...state.generic };
 
   // Monthly-premium deltas per coverage choice (vs Most Popular baseline)
   const bilDeltas = {
@@ -1342,6 +1372,48 @@
   };
   const pkgDeltas = { essential: 0, preferred: 20.00, premium: 50.00 };
 
+  /* Generic coverage configs — title, description, options, baseline price (for monthly fields), and $/step for Custom recalc.
+     These are PROTOTYPE placeholders so every coverage row is explorable. */
+  const vehicleSchemas = {
+    Comp:      { title: 'Comprehensive', desc: 'Optional coverage for damage to your car that isn\'t from a collision — fire, theft, vandalism, or a fallen tree. Your lender may require this while you\'re financing or leasing the vehicle.', options: ['No Coverage','$100 deductible','$250 deductible','$500 deductible','$750 deductible','$1,000 deductible','$1,500 deductible','$2,000 deductible'], stepDelta: -1.5 },
+    Glass:     { title: 'Glass deductible', desc: 'Set a lower deductible specifically for glass repairs. Choose "N/A" to match the comprehensive deductible.', options: ['N/A','No Glass Deductible','$100 Glass Deductible','Comprehensive deductible'], stepDelta: -1 },
+    Coll:      { title: 'Collision', desc: 'Pays for damage to your vehicle in an accident regardless of fault. Lower deductibles raise the premium.', options: ['No Coverage','$250 Per Occurrence','$500 Per Occurrence','$1,000 Per Occurrence'], stepDelta: -2 },
+    Cdw:       { title: 'Collision damage waiver', desc: 'Waives your deductible if you\'re in a covered collision with another identified insured driver.', options: ['N/A','$100 Per Occurrence','$125 Per Occurrence','$250 Per Occurrence'], stepDelta: -0.5 },
+    Tow:       { title: 'Towing and labor', desc: 'Reimburses towing and on-the-road labor after a covered breakdown.', options: ['No Coverage','$30 Per Occurrence','$50 Per Occurrence','$100 Per Occurrence'], stepDelta: 1 },
+    Rental:    { title: 'Substitute transportation / rental reimbursement', desc: 'Covers a rental car while yours is in the shop after a covered loss.', options: ['No Coverage','$30 per day/$900 Max','$40 per day/$1.2K Max','$50 per day/$1.5K Max','$100 per day/$3K Max'], stepDelta: 2 },
+    LoanLease: { title: 'Loan/lease gap coverage', desc: 'Pays the gap between your car\'s actual cash value and your remaining loan/lease balance if the car is totaled.', options: ['Declined','Included'], stepDelta: 1.5 },
+  };
+  const coverageConfigs = {
+    propDmg:    { title: 'Property damage liability', desc: 'Pays for damage you cause to someone else\'s property in an accident.', options: ['$5K','$10K','$25K','$50K','$100K','$250K'], stepDelta: 3, basePrice: 40, priceMode: 'monthly' },
+    pipLimit:   { title: 'Personal Injury Protection Limit', desc: 'New Jersey is a no-fault state — medical expenses from an accident are covered by your own insurer regardless of who caused the crash. If you select Full Benefits, PIP also pays for lost wages and other services.', options: ['$15K','$50K','$75K','$150K','$250K'], stepDelta: 2, priceMode: 'included' },
+    pipDed:     { title: 'Personal Injury Protection Deductible', desc: 'The amount you must pay out of pocket per claim before PIP coverage kicks in. You can lower your premium by choosing a higher deductible.', options: ['$250','$500','$1,000','$2,000'], stepDelta: -2, priceMode: 'included' },
+    pipHealth:  { title: 'PIP healthcare selection', desc: 'Choose how PIP benefits coordinate with your health insurance. Full Benefits provides the broadest coverage.', options: ['Full Benefits','Basic Benefits','No Benefits'], stepDelta: -8, basePrice: 70, priceMode: 'monthly' },
+    pipFullMed: { title: 'PIP full med only', desc: 'Limits PIP payouts to medical expenses only.', options: ['Option 1','Option 2','Option 3'], stepDelta: 3, basePrice: 20, priceMode: 'monthly' },
+    medPay:     { title: 'Medical payments', desc: 'Covers medical expenses for you and your passengers regardless of fault, secondary to PIP.', options: ['$5K','$10K','$25K','$50K'], stepDelta: 2, priceMode: 'included' },
+    tort:       { title: 'Tort threshold', desc: 'Determines your right to sue for pain and suffering after an accident. "Limited" lowers your premium; "Unlimited" allows broader legal recourse.', options: ['Limited','Limitation on Lawsuit','Unlimited'], stepDelta: 6, priceMode: 'included' },
+    umBil:      { title: 'UM/UIM bodily injury', desc: 'Covers injuries to you and your passengers caused by an uninsured or underinsured driver.', options: ['$25K/$50K','$50K/$100K','$100K/$300K','$250K/$500K','$500K/$1M'], stepDelta: 3, basePrice: 30, priceMode: 'monthly' },
+    umPd:       { title: 'UM/UIM property damage', desc: 'Covers damage to your vehicle or property caused by an uninsured/underinsured driver.', options: ['$10K','$25K','$50K','$100K'], stepDelta: 2, priceMode: 'included' },
+  };
+  // Vehicle 1 and Vehicle 2 share schemas; per-vehicle baseline monthly prices so the same schema can produce different $/mo per car.
+  const vehicleBasePrices = {
+    v1: { Comp: 15, Coll: 30, Rental: 20 },
+    v2: { Comp: 12, Coll: 25, Rental: 15 },
+  };
+  ['v1','v2'].forEach(prefix => {
+    Object.keys(vehicleSchemas).forEach(key => {
+      const schema = vehicleSchemas[key];
+      const base = (vehicleBasePrices[prefix] || {})[key];
+      coverageConfigs[prefix + key] = {
+        title: schema.title,
+        desc: schema.desc,
+        options: schema.options,
+        stepDelta: schema.stepDelta,
+        basePrice: base,
+        priceMode: base ? 'monthly' : 'included',
+      };
+    });
+  });
+
   const planPrices = {
     price:    { monthly: '$98.42',  today: '$189.45', full: '$689.97', save: '$80.00',  total: '$738.47' },
     popular:  { monthly: '$115.07', today: '$206.07', full: '$795.07', save: '$90.00',  total: '$875.00' },
@@ -1349,8 +1421,23 @@
     custom:   { monthly: '$115.07', today: '$206.07', full: '$795.07', save: '$90.00',  total: '$875.00' },
   };
 
+  function genericDelta() {
+    // Reflect the user's current selections (state.generic) against the original baseline.
+    // Running this before genericSaved is snapshotted ensures the recalc picks up the latest edits.
+    let sum = 0;
+    Object.keys(state.generic).forEach(key => {
+      const cfg = coverageConfigs[key];
+      if (!cfg) return;
+      const idx = cfg.options.indexOf(state.generic[key]);
+      const origIdx = cfg.options.indexOf(state.genericOriginal[key]);
+      if (idx < 0 || origIdx < 0 || idx === origIdx) return;
+      sum += (idx - origIdx) * (cfg.stepDelta || 0);
+    });
+    return sum;
+  }
+
   function computeCustomPrices() {
-    const delta = (bilDeltas[state.bil] || 0) + (pkgDeltas[state.pkgSaved] || 0);
+    const delta = (bilDeltas[state.bil] || 0) + (pkgDeltas[state.pkgSaved] || 0) + genericDelta();
     const base = planPrices.popular;
     const num = s => parseFloat(s.replace(/[$,]/g, ''));
     const fmt = n => '$' + n.toFixed(2);
@@ -1486,6 +1573,28 @@
       extraPipValEl.innerHTML = state.extraPip + ' <i class="fa-solid fa-chevron-right chev"></i>';
     }
 
+    // Generic coverage fields — update the value column + recompute monthly price for each
+    Object.keys(state.generic).forEach(key => {
+      const cfg = coverageConfigs[key];
+      if (!cfg) return;
+      const valEl = document.querySelector(`[data-value-for="${key}"]`);
+      if (valEl) {
+        valEl.innerHTML = state.generic[key] + ' <i class="fa-solid fa-chevron-right chev"></i>';
+      }
+      const priceEl = document.querySelector(`[data-field="${key}"]`);
+      if (priceEl) {
+        if (cfg.priceMode === 'monthly' && cfg.basePrice != null) {
+          const idx = cfg.options.indexOf(state.generic[key]);
+          const origIdx = cfg.options.indexOf(state.genericOriginal[key]);
+          const diff = (idx >= 0 && origIdx >= 0) ? (idx - origIdx) * (cfg.stepDelta || 0) : 0;
+          const monthly = Math.max(0, cfg.basePrice + diff);
+          priceEl.dataset.value = '$' + monthly.toFixed(0) + '/mo';
+        } else {
+          priceEl.dataset.value = 'Included';
+        }
+      }
+    });
+
     // Per-field Pending: only items whose field was edited show "Pending"
     document.querySelectorAll('[data-field]').forEach(el => {
       const field = el.dataset.field;
@@ -1498,21 +1607,22 @@
       }
     });
 
-    // CTA copy + price color reflect whether any field is pending recalculation
+    // CTA copy reflects whether any field is pending recalculation.
+    // Price color, however, only dims on the Custom tab while pending —
+    // other tiers show a stable, already-priced quote and should stay primary blue.
     const mainCta = document.getElementById('main-cta');
     const bsCta = document.getElementById('bs-cta');
     const bsAmount = document.getElementById('bs-price');
     if (state.needsRecalc) {
       mainCta.textContent = 'Recalculate my quote';
       bsCta.textContent = 'Recalculate my quote';
-      document.getElementById('price-big').classList.remove('active');
-      if (bsAmount) bsAmount.classList.add('disabled');
     } else {
       mainCta.textContent = 'Continue with purchase';
       bsCta.textContent = 'Continue with purchase';
-      document.getElementById('price-big').classList.add('active');
-      if (bsAmount) bsAmount.classList.remove('disabled');
     }
+    const priceDisabled = state.needsRecalc && state.plan === 'custom';
+    document.getElementById('price-big').classList.toggle('active', !priceDisabled);
+    if (bsAmount) bsAmount.classList.toggle('disabled', priceDisabled);
     mainCta.classList.remove('preview');
     bsCta.classList.remove('preview');
 
@@ -1658,6 +1768,55 @@
     refreshMain();
   }
 
+  /* Generic coverage editor — used for every coverage except BIL / Package / Extra PIP */
+  let genericCurrentKey = null;
+  let genericDraft = null;
+
+  function openGenericModal(key) {
+    const cfg = coverageConfigs[key];
+    if (!cfg) { showToast('Coming soon'); return; }
+    genericCurrentKey = key;
+    genericDraft = state.generic[key];
+    document.getElementById('generic-title').textContent = cfg.title;
+    document.getElementById('generic-desc').textContent = cfg.desc || '';
+    const container = document.getElementById('generic-options');
+    container.innerHTML = cfg.options.map(opt => `
+      <label class="radio-row${opt === state.generic[key] ? ' selected' : ''}" data-value="${opt.replace(/"/g,'&quot;')}">
+        <span class="radio-dot"></span>
+        <span class="radio-label">${opt}</span>
+        ${opt === state.genericOriginal[key] ? '<span class="chip current-chip">Current</span>' : ''}
+      </label>
+    `).join('');
+    container.querySelectorAll('.radio-row').forEach(row => {
+      row.addEventListener('click', () => {
+        container.querySelectorAll('.radio-row').forEach(r => r.classList.remove('selected'));
+        row.classList.add('selected');
+        genericDraft = row.dataset.value;
+        document.getElementById('generic-save').classList.toggle('disabled', genericDraft === state.generic[key]);
+      });
+    });
+    document.getElementById('generic-save').classList.add('disabled');
+    openModal('generic-modal');
+  }
+  function closeGenericModal() { closeModal('generic-modal'); }
+  function saveGeneric() {
+    if (!genericCurrentKey || genericDraft == null) return;
+    if (genericDraft === state.generic[genericCurrentKey]) return;
+    state.generic[genericCurrentKey] = genericDraft;
+    // Pending only if the saved value differs from the last-recalculated (savedOriginal) snapshot.
+    if (state.generic[genericCurrentKey] !== state.genericSaved[genericCurrentKey]) {
+      state.pendingFields.add(genericCurrentKey);
+      state.needsRecalc = true;
+    } else {
+      state.pendingFields.delete(genericCurrentKey);
+      // If nothing else is pending, clear the global flag.
+      if (state.pendingFields.size === 0) state.needsRecalc = false;
+    }
+    closeGenericModal();
+    showToast(coverageConfigs[genericCurrentKey].title + ' updated');
+    refreshMain();
+  }
+
   function onContinue() {
     if (state.needsRecalc) {
       // Simulate quote recalculation
@@ -1676,6 +1835,7 @@
         state.plan = 'custom';
         state.needsRecalc = false;
         state.pendingFields.clear();
+        state.genericSaved = { ...state.generic };
         cta.classList.remove('disabled');
         bsCta.classList.remove('disabled');
         refreshMain();
