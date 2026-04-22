@@ -1,0 +1,13 @@
+# Ignore everything by default
+*
+
+# Whitelist only the prototype + meta files
+!prototype.html
+!README.md
+!.gitignore
+
+# Never commit local config, OS cruft, or editor state
+.DS_Store
+.claude/
+.vscode/
+.idea/

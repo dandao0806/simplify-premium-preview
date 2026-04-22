@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=430,initial-scale=1,viewport-fit=cover" />
+<title>Simplify Premium Preview — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Open+Sans:wght@300;400;600;700&family=Open+Sans+Condensed:wght@300&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<style>
+  :root {
+    --primary: #0078d6;
+    --primary-main: #0078d6;
+    --primary-light: #d3e5f9;
+    --primary-paper-1: #f5faff;
+    --primary-paper-3: #e9f2fc;
+    --secondary: #ff7826;
+    --secondary-soft: rgba(255,120,38,.2);
+    --info-main: #a7caf2;
+    --info-contrast: #014361;
+    --text-primary: #000;
+    --text-secondary: rgba(0,0,0,.6);
+    --text-disabled: rgba(0,0,0,.38);
+    --gray-100: #f3f3f3;
+    --border: #d6d3d3;
+    --border-soft: #dee2e8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #e5e7eb; font-family: 'Open Sans', sans-serif; color: #000; }
+  body { min-height: 100vh; display: flex; justify-content: center; padding: 20px 0; }
+
+  /* Phone frame */
+  .phone {
+    width: 430px;
+    min-height: 932px;
+    background: #fff;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    border: 4px solid #111;
+  }
+
+  /* iOS status bar */
+  .ios-status {
+    height: 54px;
+    background: #0078d6;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px 0 32px;
+    font-family: -apple-system, 'SF Pro Text', 'Open Sans', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    position: relative;
+    z-index: 10;
+  }
+  .ios-status .time { font-variant-numeric: tabular-nums; }
+  .ios-status .right { display: flex; align-items: center; gap: 6px; }
+  .ios-status .right i { font-size: 15px; }
+  .ios-status .battery {
+    width: 26px; height: 12px; border: 1.5px solid #fff; border-radius: 3px;
+    position: relative; display: inline-block; padding: 1px;
+  }
+  .ios-status .battery::after {
+    content: ''; position: absolute; right: -4px; top: 3px;
+    width: 2px; height: 4px; background: #fff; border-radius: 0 2px 2px 0;
+  }
+  .ios-status .battery .fill {
+    display: block; height: 100%; width: 80%; background: #fff; border-radius: 1.5px;
+  }
+
+  /* Top nav */
+  .top-nav {
+    background: var(--primary);
+    height: 61px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 17px 10px;
+  }
+  .top-nav .logo {
+    color: #fff; font-family: 'Manrope', sans-serif; font-weight: 700;
+    font-size: 22px; line-height: 1; letter-spacing: -0.5px;
+    font-style: italic;
+  }
+  .top-nav .logo small { display: block; font-size: 10px; font-weight: 400; text-align: right; letter-spacing: 1px; }
+  .top-nav .help-btn {
+    background: none; border: none; color: #fff; font-size: 14px;
+    display: flex; align-items: center; gap: 6px; cursor: pointer;
+    font-family: 'Open Sans', sans-serif; padding: 6px 10px;
+  }
+  .top-nav .help-btn:hover { background: rgba(255,255,255,0.1); border-radius: 6px; }
+
+  /* Progress bar */
+  .progress-bar { padding: 18px 18px 0 18px; }
+  .progress-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-right: 5px;
+  }
+  .progress-prev {
+    color: var(--primary); font-weight: 600; font-size: 14px;
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: underline; cursor: pointer; background: none; border: none;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .progress-title { font-weight: 700; font-size: 16px; }
+  .progress-step { font-size: 14px; }
+  .progress-dots {
+    display: flex; gap: 8px; margin-top: 16px;
+  }
+  .progress-dots > div {
+    flex: 1; height: 6px; border-radius: 6px;
+    background: var(--secondary);
+  }
+  .progress-dots > div.inactive { background: var(--secondary-soft); }
+
+  /* Screen management */
+  .screen { display: none; padding-bottom: 24px; }
+  .screen.active { display: block; }
+
+  /* Main quote page */
+  .quote-title {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400; font-size: 30px; line-height: 38px;
+    color: var(--primary); padding: 0 18px; margin-top: 24px;
+    text-align: center;
+  }
+
+  .tabs-wrap { padding: 0 18px; margin-top: 24px; }
+  .tabs-row { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .tab-pill {
+    border: 1px solid #000; background: #fff; border-radius: 40px;
+    height: 42px; padding: 0 14px; font-size: 16px;
+    font-family: 'Open Sans', sans-serif; cursor: pointer; color: #000;
+    min-width: 140px; flex: 1;
+  }
+  .tab-pill:nth-child(2) { min-width: 160px; }
+  .tab-pill.active {
+    background: var(--secondary-soft); border-color: var(--secondary);
+    font-weight: 700;
+  }
+  .tab-pill.price-only { display: block; margin: 12px auto 0 auto; flex: 0 0 200px; }
+  #tabs-row-2 { margin-top: 12px; justify-content: center; }
+  #tabs-row-2 .tab-pill { min-width: 160px; flex: 0 0 auto; }
+  .tab-pill.tab-custom {
+    border-color: #000;
+    color: #000;
+  }
+  .tab-pill.tab-custom.active {
+    display: flex;
+    padding: 16px 26px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 40px;
+    border: 1px solid var(--secondary);
+    background: var(--secondary-soft);
+    font-weight: 700;
+    color: #000;
+  }
+  .price-alert {
+    margin: 16px 24px 0 24px;
+    padding: 12px 16px;
+    color: var(--info-contrast);
+    font-size: 14px;
+    background: var(--primary-paper-3);
+    border-radius: 8px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .price-alert .alert-icon { color: var(--info-contrast); margin-top: 1px; }
+  .price-alert.decrease { background: #e6f5ea; color: #1e5a2e; }
+  .price-alert.decrease .alert-icon { color: #1e5a2e; }
+
+  /* Price block */
+  .price-block { padding: 24px 18px 0 18px; text-align: center; }
+  .price-line {
+    font-family: 'Open Sans', sans-serif; font-size: 16px;
+  }
+  .price-line b { font-weight: 700; }
+  .price-big {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700; font-size: 75px; letter-spacing: -3.75px;
+    color: rgba(0,0,0,0.38); line-height: 1.1;
+    margin: 8px 0;
+  }
+  .price-big.active { color: var(--primary); }
+  .price-save { font-size: 16px; margin-top: 8px; }
+
+  .cta {
+    display: block; width: calc(100% - 36px); margin: 16px 18px 0 18px;
+    background: var(--secondary); color: #000; border: none; border-radius: 44px;
+    height: 54px; font-family: 'Open Sans', sans-serif; font-size: 16px;
+    font-weight: 600; cursor: pointer;
+  }
+  .cta.disabled { background: #e5d9d0; color: rgba(0,0,0,.5); cursor: not-allowed; font-weight: 400; }
+  .cta.preview {
+    background: #f7c9b0; color: #000;
+  }
+
+  .link-row {
+    display: flex; justify-content: center; gap: 24px; padding: 16px 18px 0;
+    font-size: 16px; color: var(--primary);
+  }
+  .link-row button {
+    background: none; border: none; color: var(--primary); cursor: pointer;
+    display: flex; align-items: center; gap: 6px; font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .fa-icon {
+    color: var(--primary);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    text-align: center;
+  }
+
+  .discount-row {
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    padding: 10px 18px 0; color: var(--primary); font-size: 16px;
+  }
+  .discount-row button {
+    background: none; border: none; color: var(--primary); cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; gap: 8px;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .discount-row .chev { transition: transform .2s; }
+  .discount-row.open .chev { transform: rotate(180deg); }
+  .discount-panel {
+    display: none; background: #f5faff; border: 1px solid #d3e5f9;
+    border-radius: 6px; margin: 12px 18px 0; padding: 12px 16px;
+    font-size: 14px;
+  }
+  .discount-panel.open { display: block; }
+  .discount-panel ul { margin: 8px 0 0 0; padding-left: 20px; }
+
+  /* Coverage sections */
+  .coverage-section { padding: 0 18px; margin-top: 32px; }
+  .coverage-head {
+    display: flex; align-items: center; gap: 4px; margin-bottom: 12px;
+  }
+  .coverage-head i {
+    color: var(--primary-main);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    text-align: center;
+    width: 34px;
+    font-feature-settings: 'liga' off, 'clig' off;
+  }
+  .coverage-head .coverage-icon-svg {
+    width: 24px; height: 24px; display: inline-flex; align-items: center;
+    justify-content: center; margin-right: 6px;
+    flex-shrink: 0;
+  }
+  .coverage-head .coverage-icon-svg svg { width: 20px; height: 22px; }
+  .coverage-head h2 {
+    font-family: 'Manrope', sans-serif; font-weight: 400; color: var(--primary);
+    font-size: 24px; margin: 0; line-height: 32px;
+  }
+  .coverage-sub {
+    font-family: 'Open Sans', sans-serif; font-weight: 300;
+    font-size: 18px; line-height: 28px; margin: 0 0 12px 0;
+  }
+
+  .coverage-card {
+    border: 1px solid var(--border); border-radius: 6px; padding: 16px;
+  }
+  .coverage-item {
+    padding: 12px 0; border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+  .coverage-item:last-child { border-bottom: none; }
+  .coverage-item:hover { background: #fafbfd; }
+  .coverage-item .row-1 {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  }
+  .coverage-item .name {
+    font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 18px;
+    line-height: 30px;
+  }
+  .coverage-item .price {
+    font-family: 'Open Sans', sans-serif; font-size: 18px;
+    color: #000;
+    white-space: nowrap;
+  }
+  .coverage-item .price.pending { color: var(--text-secondary); }
+  .coverage-item .price.included { color: #000; }
+  .coverage-item .value {
+    display: flex; align-items: center; gap: 4px; color: var(--primary);
+    font-size: 16px;
+  }
+  .coverage-item .value .chev { font-size: 12px; }
+
+  /* Vehicle card */
+  .vehicle-card {
+    border: 1px solid var(--border); border-radius: 6px; padding: 16px;
+    margin-top: 16px;
+  }
+  .vehicle-card .vc-head {
+    display: flex; align-items: center; gap: 10px; padding-bottom: 12px;
+    border-bottom: 1px solid #eee; margin-bottom: 12px;
+  }
+  .vehicle-card .vc-head i { color: var(--primary); }
+  .vehicle-card .vc-title { font-weight: 700; font-size: 16px; line-height: 1.3; }
+  .vehicle-card .vc-sub { font-size: 14px; color: var(--text-secondary); }
+
+  /* Package upgrades */
+  .pkg-card {
+    border: 1px solid var(--border); border-radius: 6px; padding: 20px 16px;
+  }
+  .pkg-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 20px; gap: 12px;
+  }
+  .pkg-header-left { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .pkg-header .label {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700; font-size: 18px; color: #000;
+  }
+  .pkg-header .pkg-selected-link {
+    color: var(--primary); font-size: 16px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    text-decoration: none;
+  }
+  .pkg-header .pkg-selected-link i { font-size: 12px; }
+  .pkg-header .pkg-price {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px; color: #000; white-space: nowrap; padding-top: 2px;
+  }
+
+  .pkg-card .included-title {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700; font-size: 18px; color: #000;
+    margin: 8px 0 12px 0;
+    text-transform: none; letter-spacing: 0;
+  }
+  .pkg-card .feat-list { list-style: none; padding: 0; margin: 0; }
+  .pkg-card .feat-list li {
+    display: flex; align-items: center; gap: 20px; padding: 6px 0;
+    font-size: 16px;
+  }
+  .pkg-card .feat-list li .feat-check {
+    color: var(--secondary); font-size: 18px; width: 20px; flex-shrink: 0;
+  }
+  .pkg-card .feat-list li .feat-label { flex: 1; }
+  .pkg-card .feat-list li .feat-info {
+    color: var(--primary); font-size: 16px; cursor: pointer;
+    width: 20px; height: 20px; display: inline-flex;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Accident forgiveness perk */
+  .perk-card {
+    border: 1px solid var(--border); border-radius: 6px; padding: 16px;
+  }
+  .perk-card .perk-title {
+    display: flex; align-items: center; gap: 8px; font-weight: 700;
+    font-size: 18px; margin-bottom: 16px;
+  }
+  .perk-card .perk-title i { color: var(--primary); }
+  .perk-card .perk-btn {
+    width: 100%; height: 42px; border: 1px solid var(--primary);
+    border-radius: 44px; color: var(--primary); background: #fff;
+    font-size: 16px; cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .perk-card .perk-price {
+    text-align: right; margin-top: 8px; color: var(--primary);
+    font-size: 16px;
+  }
+
+  /* Bottom sheet — fixed to bottom of phone, responsive */
+  .bottom-sheet {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    background: #fff;
+    padding: 14px 18px calc(14px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid #e5e5e5;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; flex-wrap: nowrap;
+    font-size: 14px;
+    z-index: 20;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  }
+  .bottom-sheet.hidden { display: none; }
+  .bottom-sheet .total {
+    display: flex; flex-direction: column; align-items: flex-start;
+    flex: 0 1 auto; min-width: 0;
+  }
+  .bottom-sheet .total .bs-amount {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700; font-size: clamp(16px, 4.5vw, 18px);
+    color: #000;
+    text-decoration: underline;
+    line-height: 1.2;
+    transition: color .15s;
+  }
+  .bottom-sheet .total .bs-amount.disabled { color: rgba(0,0,0,0.38); }
+  .bottom-sheet .total small {
+    font-size: clamp(11px, 3vw, 13px);
+    color: var(--text-secondary); display: block; font-weight: 400;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .bottom-sheet .continue {
+    background: var(--secondary); color: #000; border: none;
+    padding: 12px 18px; border-radius: 44px;
+    font-size: clamp(13px, 3.6vw, 15px);
+    font-weight: 600; cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    flex: 1 1 auto; min-width: 0;
+    max-width: 60%;
+    white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .bottom-sheet .continue.preview { background: #f7c9b0; }
+  .bottom-sheet .continue.disabled { background: #e5e5e5; color: rgba(0,0,0,.5); cursor: not-allowed; }
+
+  /* Edit screens */
+  .edit-header { padding: 24px 20px 0 20px; }
+  .edit-title {
+    font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 30px;
+    line-height: 38px; color: var(--primary);
+  }
+  .edit-sub {
+    font-weight: 300; font-size: 18px; line-height: 28px; margin-top: 12px;
+  }
+
+  .edit-content { padding: 0 20px; margin-top: 24px; }
+  .section-h {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 18px;
+    line-height: 24px; margin-bottom: 16px;
+  }
+
+  /* Radios */
+  .radio-row {
+    display: flex; align-items: center; gap: 12px; padding: 8px 0;
+    cursor: pointer;
+  }
+  .radio-dot {
+    width: 24px; height: 24px; border: 2px solid #666; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all .15s;
+  }
+  .radio-dot::after {
+    content: ''; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--primary); transform: scale(0); transition: transform .15s;
+  }
+  .radio-row.selected .radio-dot { border-color: var(--primary); }
+  .radio-row.selected .radio-dot::after { transform: scale(1); }
+  .radio-row.selected .radio-label { color: var(--primary); }
+  .radio-label {
+    font-size: 14px; font-family: 'Open Sans', sans-serif;
+    line-height: 22px; flex: 1;
+  }
+  .chip {
+    background: var(--info-main); color: var(--info-contrast);
+    padding: 3px 10px; border-radius: 100px; font-size: 13px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .chip i { font-size: 14px; }
+
+  .alert {
+    background: var(--primary-paper-3);
+    border-radius: 8px; padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+    margin: 24px 0;
+    color: var(--info-contrast);
+    font-size: 16px;
+  }
+  .alert i { color: var(--info-contrast); font-size: 22px; flex-shrink: 0; }
+  .alert .alert-icon { width: 22px; height: 22px; flex-shrink: 0; color: var(--info-contrast); margin-top: 2px; }
+
+  /* Edit footer buttons */
+  .edit-actions { padding: 0 20px; margin-top: 32px; }
+  .btn-primary {
+    width: 100%; height: 54px; background: var(--secondary); color: #000;
+    border: none; border-radius: 44px; font-size: 16px; font-weight: 600;
+    cursor: pointer; font-family: 'Open Sans', sans-serif;
+  }
+  .btn-primary.disabled { background: #e5e5e5; color: rgba(0,0,0,.5); cursor: not-allowed; font-weight: 400; }
+  .btn-secondary {
+    width: 100%; height: 54px; background: #fff; color: var(--primary);
+    border: 1px solid var(--primary); border-radius: 44px; font-size: 16px;
+    cursor: pointer; margin-top: 12px; font-family: 'Open Sans', sans-serif;
+  }
+
+  /* Package tabs */
+  .pkg-toggle {
+    background: var(--primary-paper-1);
+    border: 1px solid var(--primary-light);
+    border-radius: 48px; padding: 4px;
+    display: flex; gap: 8px; margin-top: 24px;
+  }
+  .pkg-toggle .toggle-btn {
+    flex: 1; height: 48px; border-radius: 40px; border: 1px solid transparent;
+    background: transparent; font-family: 'Open Sans', sans-serif;
+    font-size: 14px; line-height: 1.15; color: #000;
+    cursor: pointer; padding: 4px;
+  }
+  .pkg-toggle .toggle-btn .t-name { display: block; font-weight: 400; }
+  .pkg-toggle .toggle-btn .t-sub { display: block; font-weight: 400; font-size: 13px; }
+  .pkg-toggle .toggle-btn.active {
+    background: var(--primary); color: #fff; border-color: var(--primary);
+  }
+  .pkg-toggle .toggle-btn.active .t-name,
+  .pkg-toggle .toggle-btn.active .t-sub { font-weight: 700; }
+
+  .pkg-summary-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-top: 28px;
+  }
+  .pkg-summary-row .name { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; }
+  .pkg-summary-row .sub { font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 16px; color: #000; display: block; margin-top: 4px; }
+  .pkg-summary-row .price { font-weight: 700; font-size: 16px; }
+
+  .key-features-h {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px;
+    color: var(--text-secondary); text-transform: uppercase;
+    margin: 24px 0 12px 0;
+  }
+  .key-features-card {
+    border: 1px solid var(--border-soft); border-radius: 6px;
+    padding: 20px 16px;
+  }
+  .key-features-card .kf-row {
+    display: flex; align-items: center; gap: 16px; padding: 8px 0;
+    font-size: 16px; line-height: 28px;
+  }
+  .key-features-card .kf-row .check { color: var(--secondary); font-size: 18px; width: 24px; }
+  .key-features-card .kf-row .info { color: var(--primary); margin-left: auto; cursor: pointer; }
+  .key-features-card .kf-row .label { flex: 1; }
+
+  .compare-link {
+    margin-top: 16px; color: var(--primary); font-size: 16px;
+    display: flex; align-items: center; gap: 6px; cursor: pointer;
+  }
+
+  /* Included chip with check */
+  .chip-included {
+    background: var(--info-main); color: var(--info-contrast);
+    border-radius: 100px; padding: 4px 10px;
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 13px;
+  }
+  .chip-included i { font-size: 14px; }
+
+  /* Footer / helpful info */
+  .helpful-info {
+    background: var(--primary); color: #fff;
+    padding: 32px 20px; margin-top: 40px;
+    font-size: 14px;
+  }
+  .helpful-info h3 { font-weight: 700; margin: 16px 0 8px; font-size: 16px; }
+  .helpful-info a, .helpful-info p { color: #fff; display: block; text-decoration: underline; margin: 4px 0; font-size: 14px; }
+  .helpful-info .faq p { text-decoration: underline; }
+  .helpful-info .copyright { text-decoration: none; margin-top: 16px; font-size: 12px; }
+
+  /* Footer small nav */
+  .footer-small {
+    background: var(--gray-100); padding: 24px 12px; text-align: center;
+    font-size: 12px; line-height: 25px;
+    font-family: 'Open Sans Condensed', sans-serif; font-weight: 300;
+  }
+  .footer-small a { text-decoration: underline; color: #000; }
+
+  /* Shared edit bottom sheet */
+  .edit-modal {
+    position: absolute; inset: 0;
+    display: none; z-index: 50;
+  }
+  .edit-modal.open { display: block; }
+  .edit-modal .em-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.45);
+    opacity: 0; transition: opacity .25s;
+  }
+  .edit-modal.open .em-backdrop { opacity: 1; }
+  .edit-modal .em-sheet {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: #fff;
+    border-top-left-radius: 20px; border-top-right-radius: 20px;
+    padding: 8px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+    max-height: 88%;
+    display: flex; flex-direction: column;
+    transform: translateY(100%); transition: transform .28s ease;
+    box-shadow: 0 -8px 24px rgba(0,0,0,.12);
+  }
+  .edit-modal.open .em-sheet { transform: translateY(0); }
+  .em-grabber {
+    width: 44px; height: 4px; border-radius: 2px;
+    background: #d0d0d0; margin: 6px auto 10px;
+    flex-shrink: 0;
+  }
+  .em-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 12px; margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+  .em-header h3 {
+    font-family: 'Manrope', sans-serif; font-weight: 400;
+    font-size: 22px; line-height: 28px; color: var(--primary); margin: 0;
+  }
+  .em-close {
+    background: none; border: none; color: var(--text-secondary);
+    width: 32px; height: 32px; border-radius: 50%;
+    cursor: pointer; font-size: 18px; flex-shrink: 0;
+  }
+  .em-close:hover { background: #f3f3f3; }
+  .em-sub {
+    font-weight: 300; font-size: 14px; line-height: 20px;
+    margin: 0 0 16px 0;
+    flex-shrink: 0;
+  }
+  .em-body {
+    flex: 1; overflow-y: auto; padding: 0 2px 8px 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .em-body .section-h {
+    font-family: 'Manrope', sans-serif; font-weight: 600;
+    font-size: 16px; margin: 0 0 12px 0;
+  }
+  .em-actions {
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .em-actions .btn-primary { margin-bottom: 8px; }
+
+  /* Toast */
+  .toast {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: 48px; background: #111; color: #fff;
+    padding: 10px 18px; border-radius: 8px; font-size: 14px;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+  /* Screen scroll area */
+  .scrollable {
+    height: calc(100% - 54px - 61px);
+    max-height: calc(932px - 54px - 61px);
+    overflow-y: auto;
+    padding-bottom: 96px;
+  }
+
+  /* Logo as image substitute */
+  .pr-logo {
+    width: 150px; height: 28px;
+    background-color: #fff;
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 28'><text x='0' y='16' font-family='Manrope,sans-serif' font-size='16' font-weight='700' font-style='italic' fill='black'>Plymouth Rock</text><text x='35' y='26' font-family='Manrope,sans-serif' font-size='8' font-style='italic' fill='black'>assurance</text></svg>") no-repeat center;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 28'><text x='0' y='16' font-family='Manrope,sans-serif' font-size='16' font-weight='700' font-style='italic' fill='black'>Plymouth Rock</text><text x='35' y='26' font-family='Manrope,sans-serif' font-size='8' font-style='italic' fill='black'>assurance</text></svg>") no-repeat center;
+  }
+
+  /* Mobile: drop the phone chrome and fill the viewport edge-to-edge */
+  @media (max-width: 500px) {
+    body {
+      padding: 0;
+      background: #fff;
+      min-height: 100svh;
+      min-height: 100vh;
+      align-items: stretch;
+    }
+    .phone {
+      width: 100%;
+      min-height: 100svh;
+      min-height: 100vh;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+    }
+    .ios-status {
+      padding-top: max(16px, env(safe-area-inset-top, 16px));
+      padding-left: max(24px, env(safe-area-inset-left, 24px));
+      padding-right: max(24px, env(safe-area-inset-right, 24px));
+      height: calc(44px + env(safe-area-inset-top, 16px));
+    }
+    .scrollable {
+      height: calc(100svh - (44px + env(safe-area-inset-top, 16px)) - 61px);
+      max-height: none;
+      padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+    }
+    .bottom-sheet {
+      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    }
+    .edit-modal .em-sheet {
+      max-height: 90%;
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- iOS status bar -->
+  <div class="ios-status">
+    <span class="time" id="ios-time">9:41</span>
+    <div class="right">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <span class="battery"><span class="fill"></span></span>
+    </div>
+  </div>
+
+  <!-- Top nav (shared) -->
+  <div class="top-nav">
+    <div class="logo">
+      <svg width="151" height="27" viewBox="0 0 151 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Plymouth Rock Assurance">
+        <path d="M0 19.3711H83.5769L75.4568 27L0 19.3711Z" fill="white"/>
+        <path d="M9.84178 0H16.5603C19.9721 0 20.8592 1.95435 20.1693 5.02959C19.7381 6.93764 18.4634 9.96659 14.0908 9.96659H11.3252L9.78174 16.811H6.05127L9.84178 0ZM11.9059 7.38008H13.9824C15.0919 7.38008 16.1168 6.2386 16.3706 5.12284C16.6811 3.74792 16.5494 2.58586 14.8694 2.58586H12.9922L11.9059 7.38008Z" fill="white"/>
+        <path d="M25.8335 0L22.043 16.8084H18.563L22.3535 0H25.8335Z" fill="white"/>
+        <path d="M26.2947 17.0823L25.583 5.23145H29.0439L28.9586 13.4971H29.0078L32.7492 5.23145H36.1084L27.6376 21.4373H23.9822L26.2947 17.0823Z" fill="white"/>
+        <path d="M40.3915 6.25754H40.4406C40.8197 5.78665 41.3145 5.40959 41.8824 5.15877C42.4503 4.90796 43.0744 4.7909 43.7009 4.81767C44.2291 4.78101 44.7554 4.90911 45.1987 5.18222C45.642 5.45532 45.9777 5.85826 46.154 6.32892C46.5955 5.8453 47.1445 5.4592 47.7621 5.19802C48.3797 4.93684 49.0507 4.80698 49.7276 4.81767C51.3809 4.81767 52.631 5.76365 52.2625 7.41896L50.1363 16.9894H46.6563L48.4829 8.76687C48.719 7.70256 48.7054 6.8749 47.5959 6.8749C46.4863 6.8749 46.1042 7.70256 45.8654 8.76687L44.0387 16.9894H40.6269L42.4536 8.76687C42.6897 7.70256 42.676 6.8749 41.5665 6.8749C40.457 6.8749 40.0721 7.70256 39.8361 8.76687L38.0032 16.9894H34.5232L37.1769 5.05433H40.6569L40.3915 6.25754Z" fill="white"/>
+        <path d="M52.606 10.8365C53.3314 7.62101 54.4436 4.87695 59.0393 4.87695C63.635 4.87695 63.5081 7.62358 62.7834 10.8365C61.9537 14.5149 60.778 17.1014 56.2819 17.1014C51.7858 17.1014 51.7763 14.5175 52.606 10.8365ZM59.3409 10.65C59.8929 8.20622 60.0472 6.97149 58.5637 6.97149C57.0803 6.97149 56.6797 8.20622 56.127 10.65C55.3164 14.2352 55.4651 15.0043 56.7507 15.0043C58.0362 15.0043 58.5337 14.2403 59.3409 10.65Z" fill="white"/>
+        <path d="M68.9266 15.6821H68.8774C68.4946 16.1478 67.9986 16.52 67.4312 16.7674C66.8638 17.0147 66.2416 17.1299 65.6171 17.1033C63.9638 17.1033 62.7164 16.1714 63.0821 14.5406L65.2084 5.10968H68.6884L66.8529 13.2576C66.6168 14.3058 66.6413 15.075 67.7536 15.075C68.8658 15.075 69.237 14.3033 69.4731 13.2576L71.3107 5.1084H74.7908L72.6645 14.5393C72.4912 15.311 72.3622 16.0975 72.2633 16.8666H68.657L68.9266 15.6821Z" fill="white"/>
+        <path d="M75.8252 5.05031H77.2343L77.6546 3.18921L81.467 1.72168L80.7164 5.05095H82.5212L82.0654 7.07539H80.2605L78.8433 13.3609C78.6427 14.2465 78.4891 14.8285 79.6232 14.8285C79.8342 14.8377 80.0455 14.8221 80.2524 14.7822L79.7938 16.8066C79.1871 16.8808 78.5762 16.9197 77.9644 16.923C74.9511 16.923 74.9811 15.0388 75.1435 14.3159L76.7812 7.07539H75.3721L75.8252 5.05031Z" fill="white"/>
+        <path d="M87.1676 16.8084L88.9943 8.70549C89.2304 7.65725 89.2167 6.84053 88.1072 6.84053C86.9977 6.84053 86.6128 7.65597 86.3795 8.70549L84.5528 16.8084H81.0728L84.8633 0H88.3433L86.937 6.23796H86.9861C87.3691 5.77255 87.8652 5.40073 88.4326 5.15383C89 4.90694 89.6221 4.79221 90.2464 4.81931C91.8998 4.81931 93.1471 5.75114 92.7814 7.38201L90.6551 16.8103H87.1696L87.1676 16.8084Z" fill="white"/>
+        <path d="M101.576 16.8084H97.8452L101.636 0H108.528C111.074 0 112.356 1.53505 111.711 4.39808C111.228 6.5415 109.978 8.14665 107.473 8.51899L107.462 8.5653C108.255 8.65597 110.634 8.84504 109.953 11.8708C109.711 12.9428 109.071 16.1087 109.261 16.8045H105.605C105.342 15.782 105.696 14.6406 105.946 13.5454C106.399 11.5441 106.979 9.84375 104.114 9.84375H103.15L101.576 16.8084ZM103.729 7.26111H105.385C106.869 7.26111 107.602 5.86561 107.842 4.79165C108.204 3.18393 107.625 2.58071 106.438 2.58071H104.785L103.729 7.26111Z" fill="white"/>
+        <path d="M111.258 10.8365C111.984 7.62101 113.096 4.87695 117.692 4.87695C122.287 4.87695 122.16 7.62358 121.436 10.8365C120.606 14.5149 119.43 17.1014 114.934 17.1014C110.438 17.1014 110.429 14.5175 111.258 10.8365ZM117.996 10.65C118.548 8.20622 118.705 6.97149 117.219 6.97149C115.733 6.97149 115.335 8.20622 114.782 10.65C113.972 14.2352 114.123 15.0043 115.406 15.0043C116.689 15.0043 117.185 14.2403 117.996 10.65Z" fill="white"/>
+        <path d="M129.492 9.30142C129.885 7.55415 129.547 6.97152 128.459 6.97152C126.978 6.97152 126.575 8.20624 126.022 10.65C125.215 14.2352 125.363 15.0043 126.646 15.0043C127.734 15.0043 128.462 14.0751 128.811 12.5374H132.291C131.571 15.7265 129.431 17.1034 126.173 17.1034C121.677 17.1034 121.666 14.5201 122.495 10.8384C123.221 7.62296 124.333 4.87891 128.928 4.87891C132.139 4.87891 133.664 6.2294 132.971 9.30271L129.492 9.30142Z" fill="white"/>
+        <path d="M132.453 16.8084L136.244 0H139.724L137.468 10.0129H137.518L141.776 5.05275H145.407L140.693 10.292L143.15 16.8103H139.222L137.431 10.4084H137.382L135.94 16.8084H132.453Z" fill="white"/>
+        <path d="M87.6725 22.4211C87.9304 21.2448 88.0136 20.5516 86.5984 20.5516C86.2476 20.5406 85.9032 20.6416 85.621 20.8383C85.3388 21.0351 85.1355 21.3159 85.044 21.6352H83.6431C84.0416 20.1458 85.3599 19.6172 86.7472 19.6172C88.189 19.6172 89.5244 20.0365 89.1095 21.9323L88.3951 25.1799C88.3268 25.477 88.219 26.0481 88.1371 26.6166H87.2419C87.1156 26.6166 86.8632 26.6809 86.885 26.5207C86.9259 26.2101 86.9621 25.9124 87.0167 25.6018H86.9894C86.7256 25.9856 86.3619 26.2994 85.933 26.5133C85.5041 26.7272 85.0242 26.834 84.539 26.8236C83.3224 26.8236 82.2238 26.2127 82.5145 24.8879C82.9348 22.9812 84.8052 22.4262 86.4722 22.4262H87.6752L87.6725 22.4211ZM86.1453 23.313C85.3265 23.3529 84.1842 23.6346 83.9672 24.6249C83.9091 24.7804 83.8947 24.9475 83.9255 25.1097C83.9564 25.272 84.0314 25.424 84.1432 25.5508C84.255 25.6776 84.3997 25.7749 84.5634 25.8332C84.727 25.8915 84.9039 25.9088 85.0767 25.8834C86.6462 25.8834 87.2275 24.569 87.4746 23.3111H86.1453V23.313Z" fill="white"/>
+        <path d="M93.8553 19.6172C95.1873 19.6172 96.5636 20.1587 96.1269 21.7014H94.726C94.973 20.8333 94.3501 20.549 93.5776 20.549C93.2266 20.5215 92.8772 20.6168 92.596 20.8167C92.3148 21.0166 92.1216 21.307 92.0532 21.6326C91.8854 22.3895 93.0768 22.4455 93.5503 22.594C94.6571 22.9709 95.998 23.1085 95.6657 24.6358C95.3006 26.3008 93.5067 26.8133 92.0648 26.8133C90.595 26.8133 89.5073 26.1651 89.8649 24.5934H91.2658C91.2112 24.7531 91.2006 24.9233 91.2348 25.0879C91.269 25.2526 91.347 25.4064 91.4615 25.5349C91.576 25.6634 91.7232 25.7624 91.8893 25.8227C92.0554 25.883 92.2351 25.9026 92.4115 25.8796C92.8177 25.9249 93.2276 25.8306 93.566 25.6141C93.9044 25.3976 94.1486 25.0733 94.2538 24.7008C94.5889 23.1844 90.0676 24.324 90.653 21.6712C90.9594 20.2538 92.5841 19.6172 93.8553 19.6172Z" fill="white"/>
+        <path d="M101.036 19.6172C102.365 19.6172 103.744 20.1587 103.307 21.7014H101.906C102.153 20.8333 101.53 20.549 100.758 20.549C100.407 20.5215 100.057 20.6168 99.7763 20.8167C99.4951 21.0166 99.3019 21.307 99.2335 21.6326C99.0656 22.3895 100.257 22.4455 100.731 22.594C101.837 22.9709 103.181 23.1085 102.846 24.6358C102.481 26.3008 100.687 26.8133 99.2451 26.8133C97.7753 26.8133 96.6849 26.1651 97.0451 24.5934H98.4426C98.3881 24.7531 98.3774 24.9233 98.4116 25.0879C98.4458 25.2526 98.5239 25.4064 98.6383 25.5349C98.7528 25.6634 98.9 25.7624 99.0661 25.8227C99.2323 25.883 99.4119 25.9026 99.5883 25.8796C99.9945 25.9249 100.404 25.8306 100.743 25.6141C101.081 25.3976 101.325 25.0733 101.431 24.7008C101.763 23.1844 97.2444 24.324 97.8271 21.6712C98.1397 20.2538 99.763 19.6172 101.036 19.6172Z" fill="white"/>
+        <path d="M109.928 19.8164H111.257L109.763 26.6164H108.461L108.681 25.6119H108.654C108.338 25.994 107.933 26.3019 107.469 26.5112C107.006 26.7206 106.497 26.8257 105.984 26.8184C104.511 26.8184 103.91 25.7341 104.209 24.3682L105.209 19.8164H106.538L105.651 23.837C105.393 25.0145 105.483 25.8833 106.758 25.8833C107.119 25.8768 107.473 25.7841 107.785 25.6138C108.098 25.4435 108.36 25.2012 108.546 24.9097C108.832 24.4078 109.04 23.8701 109.165 23.3129L109.928 19.8164Z" fill="white"/>
+        <path d="M112.94 26.6188H111.61L113.102 19.8156H114.434L114.145 21.1288H114.173C114.374 20.6986 114.707 20.3348 115.128 20.0838C115.55 19.8328 116.042 19.706 116.54 19.7198C116.708 19.7198 116.845 19.7333 116.999 19.7333L116.729 20.9551C116.549 20.8973 116.359 20.8739 116.169 20.8863C114.477 20.9423 113.994 21.8085 113.678 23.2445L112.94 26.6188Z" fill="white"/>
+        <path d="M121.374 22.4211C121.632 21.2448 121.715 20.5516 120.3 20.5516C119.949 20.5399 119.604 20.6407 119.322 20.8375C119.04 21.0343 118.837 21.3155 118.746 21.6352H117.345C117.743 20.1458 119.062 19.6172 120.449 19.6172C121.891 19.6172 123.226 20.0365 122.811 21.9323L122.097 25.1799C122.029 25.477 121.918 26.0481 121.836 26.6166H120.938C120.812 26.6166 120.562 26.6809 120.581 26.5207C120.622 26.2101 120.661 25.9124 120.713 25.6018H120.686C120.422 25.9859 120.057 26.2999 119.628 26.5138C119.199 26.7276 118.718 26.8343 118.233 26.8236C117.016 26.8236 115.917 26.2127 116.208 24.8879C116.628 22.9812 118.499 22.4262 120.166 22.4262H121.374V22.4211ZM119.847 23.313C119.028 23.3529 117.886 23.6346 117.669 24.6249C117.611 24.7804 117.596 24.9475 117.627 25.1099C117.658 25.2723 117.733 25.4243 117.844 25.5512C117.956 25.6781 118.101 25.7754 118.265 25.8336C118.429 25.8919 118.606 25.909 118.779 25.8834C120.348 25.8834 120.929 24.569 121.179 23.3111H119.846L119.847 23.313Z" fill="white"/>
+        <path d="M126.081 20.8236H126.108C126.384 20.4643 126.742 20.1689 127.157 19.9599C127.571 19.7508 128.031 19.6336 128.501 19.6172C128.993 19.6172 131.135 19.7394 130.654 21.9214L129.621 26.6224H128.292L129.234 22.3413C129.481 21.2172 129.124 20.6088 128.006 20.6088C127.491 20.6135 126.995 20.7916 126.608 21.1111C126.372 21.2995 125.94 21.5973 125.653 22.9233L124.839 26.6224H123.509L125.003 19.8223H126.305L126.081 20.8236Z" fill="white"/>
+        <path d="M136.519 22.0021C136.637 21.1468 136.348 20.5519 135.395 20.5519C134.121 20.5519 133.396 21.622 133.044 23.2182C132.692 24.8143 132.948 25.8844 134.222 25.8844C134.669 25.8703 135.097 25.7099 135.432 25.4308C135.767 25.1517 135.988 24.7713 136.057 24.3552H137.389C137.196 25.0618 136.759 25.6875 136.146 26.1334C135.533 26.5793 134.78 26.8198 134.005 26.8169C131.754 26.8169 131.195 25.2735 131.638 23.2722C132.074 21.2831 133.475 19.6182 135.703 19.6182C136.029 19.5853 136.358 19.628 136.662 19.7423C136.966 19.8567 137.236 20.0394 137.448 20.2745C137.66 20.5095 137.807 20.7899 137.878 21.0911C137.949 21.3923 137.941 21.7053 137.854 22.0027L136.519 22.0021Z" fill="white"/>
+        <path d="M139.881 23.4626C139.521 24.6523 139.754 25.8844 141.109 25.8844C141.564 25.9211 142.019 25.8017 142.388 25.548C142.757 25.2943 143.017 24.9235 143.12 24.5037H144.521C144.272 25.2131 143.781 25.825 143.125 26.2438C142.468 26.6626 141.683 26.8648 140.892 26.8188C138.637 26.8188 138.082 25.2754 138.521 23.2741C138.961 21.2851 140.364 19.6201 142.587 19.6201C144.677 19.66 145.389 20.9481 144.975 22.8278L144.835 23.4651L139.881 23.4626ZM143.634 22.5706C143.911 21.4317 143.574 20.5526 142.285 20.5526C141.728 20.6002 141.205 20.8266 140.804 21.1938C140.402 21.5611 140.147 22.0471 140.08 22.5706H143.634Z" fill="white"/>
+        <path d="M147.083 24.0227C147.461 23.7072 147.951 23.5363 148.456 23.5436C148.964 23.5316 149.459 23.703 149.838 24.0227C150.017 24.1669 150.16 24.3459 150.259 24.5474C150.357 24.7489 150.408 24.9681 150.407 25.1899C150.408 25.4103 150.358 25.6283 150.259 25.8283C150.161 26.0283 150.017 26.2056 149.838 26.3474C149.46 26.6698 148.966 26.8441 148.456 26.8349C147.949 26.8442 147.457 26.6697 147.083 26.3474C146.902 26.2058 146.756 26.0283 146.656 25.8275C146.556 25.6268 146.504 25.4078 146.504 25.186C146.504 24.9642 146.556 24.7452 146.656 24.5445C146.756 24.3437 146.902 24.1662 147.083 24.0246V24.0227ZM147.33 26.1815C147.64 26.442 148.04 26.5859 148.456 26.5859C148.871 26.5859 149.272 26.442 149.582 26.1815C149.724 26.0527 149.837 25.8983 149.914 25.7274C149.991 25.5565 150.031 25.3727 150.031 25.187C150.031 25.0012 149.991 24.8174 149.914 24.6465C149.837 24.4756 149.724 24.3212 149.582 24.1924C149.27 23.9347 148.87 23.7925 148.456 23.7925C148.041 23.7925 147.641 23.9347 147.33 24.1924C147.182 24.3182 147.066 24.4724 146.987 24.6445C146.909 24.8166 146.87 25.0026 146.875 25.1899C146.872 25.376 146.911 25.5605 146.99 25.7314C147.068 25.9023 147.184 26.0557 147.33 26.1815ZM147.711 24.2227H148.584C149.107 24.2227 149.368 24.4034 149.368 24.7648C149.372 24.8346 149.36 24.9044 149.333 24.9696C149.306 25.0347 149.265 25.0938 149.212 25.1429C149.155 25.1959 149.088 25.2371 149.013 25.2636C148.938 25.29 148.859 25.3013 148.779 25.2966L149.429 26.1487H149.036L148.408 25.2966H148.082V26.1487H147.709L147.711 24.2227ZM148.081 25.0497H148.523C148.642 25.0581 148.761 25.0373 148.868 24.9892C148.91 24.9639 148.944 24.9279 148.966 24.8853C148.988 24.8426 148.997 24.7951 148.991 24.7481C148.994 24.7018 148.983 24.6557 148.959 24.6154C148.934 24.575 148.898 24.542 148.855 24.5204C148.75 24.4833 148.639 24.4647 148.527 24.4657H148.085L148.081 25.0497Z" fill="white"/>
+      </svg>
+    </div>
+    <button class="help-btn" onclick="showToast('Help center')"><i class="fa-regular fa-circle-question"></i> Help</button>
+  </div>
+
+  <div class="scrollable" id="screen-root">
+
+    <!-- =============== MAIN QUOTE PAGE =============== -->
+    <div id="screen-main" class="screen active">
+      <div class="progress-bar">
+        <div class="progress-row">
+          <button class="progress-prev" onclick="showToast('Previous step')"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+          <span class="progress-title">Your Quote</span>
+          <span class="progress-step">Step 5 of 7</span>
+        </div>
+        <div class="progress-dots">
+          <div></div><div></div><div></div><div></div><div></div>
+          <div class="inactive"></div><div class="inactive"></div>
+        </div>
+      </div>
+
+      <h1 class="quote-title">Select a 6-month estimated policy</h1>
+
+      <div class="tabs-wrap">
+        <div class="tabs-row">
+          <button class="tab-pill" data-plan="price">Price Conscious</button>
+          <button class="tab-pill active" data-plan="popular">Most Popular</button>
+        </div>
+        <div class="tabs-row" id="tabs-row-2">
+          <button class="tab-pill" data-plan="superior">Superior Coverage</button>
+          <button class="tab-pill tab-custom" data-plan="custom" id="tab-custom" style="display:none">Custom Made</button>
+        </div>
+      </div>
+
+
+      <div class="price-block">
+        <p class="price-line"><b>Pay monthly</b> <span id="price-total">(Total of 875.00)</span></p>
+        <p class="price-line" id="price-intro">Pay $206.07 today then 5 monthly payments of</p>
+        <div class="price-big" id="price-big">$115.07</div>
+        <p class="price-save">Save <b id="price-save-amt">$90.00</b> when you pay in full: <span id="price-save-full">$795.07</span></p>
+      </div>
+
+      <button class="cta" id="main-cta" onclick="onContinue()">Continue with purchase</button>
+
+      <div class="link-row">
+        <button onclick="showToast('Quote emailed')"><i class="fa-solid fa-envelope fa-icon"></i> Email quote</button>
+        <button onclick="window.print()"><i class="fa-solid fa-print fa-icon"></i> Print quote</button>
+      </div>
+
+      <div class="discount-row">
+        <button onclick="toggleDiscount(this)"><i class="fa-solid fa-circle-dollar-to-slot fa-icon"></i> Score! You've got discounts! <i class="fa-solid fa-chevron-down chev"></i></button>
+      </div>
+      <div class="discount-panel" id="discount-panel">
+        <b>Applied discounts</b>
+        <ul>
+          <li>Multi-policy</li>
+          <li>Paperless</li>
+          <li>Safe driver</li>
+        </ul>
+      </div>
+
+      <!-- Price change alert -->
+      <div class="alert price-alert" id="price-alert" style="display:none">
+        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M10.0835 6.41683H11.9168V8.25016H10.0835V6.41683ZM10.0835 10.0835H11.9168V15.5835H10.0835V10.0835ZM11.0002 1.8335C5.94016 1.8335 1.8335 5.94016 1.8335 11.0002C1.8335 16.0602 5.94016 20.1668 11.0002 20.1668C16.0602 20.1668 20.1668 16.0602 20.1668 11.0002C20.1668 5.94016 16.0602 1.8335 11.0002 1.8335ZM11.0002 18.3335C6.95766 18.3335 3.66683 15.0427 3.66683 11.0002C3.66683 6.95766 6.95766 3.66683 11.0002 3.66683C15.0427 3.66683 18.3335 6.95766 18.3335 11.0002C18.3335 15.0427 15.0427 18.3335 11.0002 18.3335Z" fill="currentColor"/>
+        </svg>
+        <span id="price-alert-text">Your premium increased by $0.00/month</span>
+      </div>
+
+      <!-- Policy Coverages -->
+      <div class="coverage-section">
+        <div class="coverage-head">
+          <span class="coverage-icon-svg" aria-hidden="true">
+            <svg viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 0L0 3.5V11C0 16.55 4.27 21.74 10 23C15.73 21.74 20 16.55 20 11V3.5L10 0Z" fill="#0078D6"/>
+              <path d="M8.4 15.6L4.4 11.6L5.8 10.2L8.4 12.8L14.2 7L15.6 8.4L8.4 15.6Z" fill="white"/>
+            </svg>
+          </span>
+          <h2>Policy coverages</h2>
+        </div>
+        <p class="coverage-sub">Coverage paid to others when you are at fault for a covered loss.</p>
+
+        <div class="coverage-card">
+          <div class="coverage-item" onclick="goToEdit('bil')">
+            <div class="row-1">
+              <div>
+                <div class="name">Bodily injury liability</div>
+                <div class="value" id="bil-value">$25K/$50K <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price" id="bil-price" data-field="bil" data-value="$35/mo">$35/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Property damage')">
+            <div class="row-1">
+              <div>
+                <div class="name">Property damage liability</div>
+                <div class="value">$10K <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$40/mo">$40/mo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Coverages -->
+      <div class="coverage-section">
+        <div class="coverage-head">
+          <i class="fa-solid fa-user"></i>
+          <h2>Personal coverages</h2>
+        </div>
+        <p class="coverage-sub">Coverage for you and your passengers.</p>
+        <div class="coverage-card">
+          <div class="coverage-item" onclick="showToast('Edit PIP')">
+            <div class="row-1">
+              <div>
+                <div class="name">Personal injury protection limit</div>
+                <div class="value">$250K <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit PIP deductible')">
+            <div class="row-1">
+              <div>
+                <div class="name">Personal injury protection deductible</div>
+                <div class="value">$500 <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit PIP Healthcare')">
+            <div class="row-1">
+              <div>
+                <div class="name">PIP healthcare selection</div>
+                <div class="value">Full Benefits <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$70/mo">$70/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit PIP Full Med')">
+            <div class="row-1">
+              <div>
+                <div class="name">PIP full med only</div>
+                <div class="value">Option 1 <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$20/mo">$20/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="openExtraPipModal()">
+            <div class="row-1">
+              <div>
+                <div class="name">Extra PIP package options</div>
+                <div class="value" id="extra-pip-value">Option 1 <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price" id="extra-pip-price" data-field="extraPip" data-value="Included">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Medical payments')">
+            <div class="row-1">
+              <div>
+                <div class="name">Medical payments</div>
+                <div class="value">$10K <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Tort threshold')">
+            <div class="row-1">
+              <div>
+                <div class="name">Tort threshold</div>
+                <div class="value">Limited <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit UM/UIM Bodily Injury')">
+            <div class="row-1">
+              <div>
+                <div class="name">UM/UIM bodily injury</div>
+                <div class="value">$250K/$500K <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$30/mo">$30/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit UM/UIM Property Damage')">
+            <div class="row-1">
+              <div>
+                <div class="name">UM/UIM property damage</div>
+                <div class="value">$50K <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle Coverages -->
+      <div class="coverage-section">
+        <div class="coverage-head">
+          <i class="fa-solid fa-car"></i>
+          <h2>Vehicle coverages</h2>
+        </div>
+
+        <div class="vehicle-card">
+          <div class="vc-head">
+            <i class="fa-solid fa-car-side"></i>
+            <div>
+              <div class="vc-title">2022 CHEVROLET EQUINOX LT AWD</div>
+              <div class="vc-sub">Sport Utility Vehicle</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Comprehensive')">
+            <div class="row-1">
+              <div>
+                <div class="name">Comprehensive</div>
+                <div class="value">$500 deductible <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$15/mo">$15/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Glass deductible')">
+            <div class="row-1">
+              <div>
+                <div class="name">Glass deductible</div>
+                <div class="value">Comprehensive deductible <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Collision')">
+            <div class="row-1">
+              <div>
+                <div class="name">Collision</div>
+                <div class="value">$500 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$30/mo">$30/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Collision damage waiver')">
+            <div class="row-1">
+              <div>
+                <div class="name">Collision damage waiver</div>
+                <div class="value">$125 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Towing')">
+            <div class="row-1">
+              <div>
+                <div class="name">Towing and labor</div>
+                <div class="value">$50 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Rental reimbursement')">
+            <div class="row-1">
+              <div>
+                <div class="name">Rental reimbursement</div>
+                <div class="value">$40 per day/$1.2K Max <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$20/mo">$20/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Loan/lease')">
+            <div class="row-1">
+              <div>
+                <div class="name">Loan/lease gap coverage</div>
+                <div class="value">Included <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vehicle-card">
+          <div class="vc-head">
+            <i class="fa-solid fa-car-side"></i>
+            <div>
+              <div class="vc-title">2022 HONDA CIVIC EX Sedan</div>
+              <div class="vc-sub">Sedan</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Comprehensive')">
+            <div class="row-1">
+              <div>
+                <div class="name">Comprehensive</div>
+                <div class="value">$500 deductible <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$12/mo">$12/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Glass deductible')">
+            <div class="row-1">
+              <div>
+                <div class="name">Glass deductible</div>
+                <div class="value">Comprehensive deductible <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Collision')">
+            <div class="row-1">
+              <div>
+                <div class="name">Collision</div>
+                <div class="value">$500 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$25/mo">$25/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Collision damage waiver')">
+            <div class="row-1">
+              <div>
+                <div class="name">Collision damage waiver</div>
+                <div class="value">$125 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Towing')">
+            <div class="row-1">
+              <div>
+                <div class="name">Towing and labor</div>
+                <div class="value">$50 Per Occurrence <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Rental reimbursement')">
+            <div class="row-1">
+              <div>
+                <div class="name">Rental reimbursement</div>
+                <div class="value">$40 per day/$1.2K Max <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price monthly-price" data-value="$15/mo">$15/mo</div>
+            </div>
+          </div>
+          <div class="coverage-item" onclick="showToast('Edit Loan/lease')">
+            <div class="row-1">
+              <div>
+                <div class="name">Loan/lease gap coverage</div>
+                <div class="value">Included <i class="fa-solid fa-chevron-right chev"></i></div>
+              </div>
+              <div class="price">Included</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Package Upgrades -->
+      <div class="coverage-section">
+        <div class="coverage-head">
+          <i class="fa-solid fa-gift"></i>
+          <h2>Package Upgrades</h2>
+        </div>
+
+        <div class="pkg-card">
+          <div class="pkg-header">
+            <div class="pkg-header-left">
+              <div class="label">Included package</div>
+              <a class="pkg-selected-link" id="pkg-selected-name" onclick="goToEdit('pkg')">Essential Assurance | Included <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+            <div class="pkg-price"><span id="pkg-selected-price">$0/mo</span></div>
+          </div>
+          <div class="included-title" id="pkg-included-heading">Essential Assurance | Included:</div>
+          <ul class="feat-list" id="pkg-feat-list"></ul>
+        </div>
+      </div>
+
+      <!-- Additional Perks -->
+      <div class="coverage-section">
+        <div class="coverage-head">
+          <i class="fa-solid fa-star"></i>
+          <h2>Additional Perks</h2>
+        </div>
+
+        <div class="perk-card">
+          <div class="perk-title"><i class="fa-solid fa-shield-check"></i> Accident forgiveness</div>
+          <button class="perk-btn" id="af-btn" onclick="toggleAccidentForgiveness()">
+            <i class="fa-solid fa-plus"></i> Add
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /.scrollable -->
+
+  <!-- Bodily Injury Liability (bottom sheet) -->
+  <div class="edit-modal" id="bil-modal" aria-hidden="true">
+    <div class="em-backdrop" onclick="closeBilModal()"></div>
+    <div class="em-sheet" role="dialog" aria-label="Edit Bodily Injury Liability">
+      <div class="em-grabber"></div>
+      <div class="em-header">
+        <h3>Edit Bodily Injury Liability</h3>
+        <button class="em-close" onclick="closeBilModal()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p class="em-sub">Pays for injuries you cause to others in an accident. Shown as per person/per accident limits.</p>
+      <div class="em-body">
+        <h4 class="section-h">Coverage</h4>
+        <div id="bil-options">
+          <label class="radio-row" data-value="$15K per person/$30K per accident"><span class="radio-dot"></span><span class="radio-label">$15K per person/$30K per accident</span></label>
+          <label class="radio-row selected" data-value="$25K per person/$50K per accident"><span class="radio-dot"></span><span class="radio-label">$25K per person/$50K per accident</span><span class="chip current-chip" style="display:none">Current</span></label>
+          <label class="radio-row" data-value="$50K per person/$100K per accident"><span class="radio-dot"></span><span class="radio-label">$50K per person/$100K per accident</span></label>
+          <label class="radio-row" data-value="$75K per person/$150K per accident"><span class="radio-dot"></span><span class="radio-label">$75K per person/$150K per accident</span></label>
+          <label class="radio-row" data-value="$100K per person/$200K per accident"><span class="radio-dot"></span><span class="radio-label">$100K per person/$200K per accident</span></label>
+          <label class="radio-row" data-value="$200K per person/$400K per accident"><span class="radio-dot"></span><span class="radio-label">$200K per person/$400K per accident</span></label>
+        </div>
+        <div class="alert" id="bil-alert" style="display:none;margin-top:16px">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <path d="M10.0835 6.41683H11.9168V8.25016H10.0835V6.41683ZM10.0835 10.0835H11.9168V15.5835H10.0835V10.0835ZM11.0002 1.8335C5.94016 1.8335 1.8335 5.94016 1.8335 11.0002C1.8335 16.0602 5.94016 20.1668 11.0002 20.1668C16.0602 20.1668 20.1668 16.0602 20.1668 11.0002C20.1668 5.94016 16.0602 1.8335 11.0002 1.8335ZM11.0002 18.3335C6.95766 18.3335 3.66683 15.0427 3.66683 11.0002C3.66683 6.95766 6.95766 3.66683 11.0002 3.66683C15.0427 3.66683 18.3335 6.95766 18.3335 11.0002C18.3335 15.0427 15.0427 18.3335 11.0002 18.3335Z" fill="currentColor"/>
+          </svg>
+          <span>Higher limits generally decrease premium.</span>
+        </div>
+      </div>
+      <div class="em-actions">
+        <button class="btn-primary disabled" id="bil-save" onclick="saveBil()">Save changes</button>
+        <button class="btn-secondary" onclick="closeBilModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Package Coverage (bottom sheet) -->
+  <div class="edit-modal" id="pkg-modal" aria-hidden="true">
+    <div class="em-backdrop" onclick="closePkgModal()"></div>
+    <div class="em-sheet" role="dialog" aria-label="Edit package coverage">
+      <div class="em-grabber"></div>
+      <div class="em-header">
+        <h3>Edit package coverage</h3>
+        <button class="em-close" onclick="closePkgModal()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p class="em-sub">Choose a package for your policy. Your current package is included at no extra cost.</p>
+      <div class="em-body">
+        <div class="pkg-toggle" id="pkg-toggle" style="margin-top:0">
+          <button class="toggle-btn active" data-pkg="essential"><span class="t-name">Essential</span><span class="t-sub">Included</span></button>
+          <button class="toggle-btn" data-pkg="preferred"><span class="t-name">Preferred</span><span class="t-sub">+$20</span></button>
+          <button class="toggle-btn" data-pkg="premium"><span class="t-name">Premium</span><span class="t-sub">+$50</span></button>
+        </div>
+        <div class="pkg-summary-row">
+          <div>
+            <div class="name" id="pkg-title">Essential Assurance </div>
+            <span class="sub" id="pkg-subtitle">Included with your policy</span>
+          </div>
+          <div>
+            <span id="pkg-price-indicator" class="chip-included"><i class="fa-solid fa-check"></i> Included</span>
+          </div>
+        </div>
+        <div class="key-features-h">KEY FEATURES</div>
+        <div class="key-features-card" id="pkg-features"></div>
+        <a class="compare-link" onclick="showToast('Compare all packages')">Compare packages <i class="fa-solid fa-chevron-right"></i></a>
+      </div>
+      <div class="em-actions">
+        <button class="btn-primary disabled" id="pkg-save" onclick="savePkg()">Save changes</button>
+        <button class="btn-secondary" onclick="closePkgModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra PIP (bottom sheet) -->
+  <div class="edit-modal" id="extraPip-modal" aria-hidden="true">
+    <div class="em-backdrop" onclick="closeExtraPipModal()"></div>
+    <div class="em-sheet" role="dialog" aria-label="Extra PIP package options">
+      <div class="em-grabber"></div>
+      <div class="em-header">
+        <h3>Extra PIP package options</h3>
+        <button class="em-close" onclick="closeExtraPipModal()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="em-body" id="extraPip-options"></div>
+      <div class="em-actions">
+        <button class="btn-primary disabled" id="extraPip-save" onclick="saveExtraPip()">Save changes</button>
+        <button class="btn-secondary" onclick="closeExtraPipModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed bottom sheet (main screen only) -->
+  <div class="bottom-sheet" id="bottom-sheet">
+    <div class="total">
+      <span class="bs-amount" id="bs-price">$115.07</span>
+      <small>monthly payment</small>
+    </div>
+    <button class="continue" id="bs-cta" onclick="onContinue()">Continue with purchase</button>
+  </div>
+
+</div><!-- /.phone -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* iOS clock */
+  function tickClock() {
+    const d = new Date();
+    const h = d.getHours() % 12 || 12;
+    const m = String(d.getMinutes()).padStart(2,'0');
+    document.getElementById('ios-time').textContent = `${h}:${m}`;
+  }
+  tickClock(); setInterval(tickClock, 30000);
+
+  /* Toast */
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 1400);
+  }
+
+  /* Navigation */
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('screen-root').scrollTop = 0;
+    // Only show the fixed bottom sheet on the main quote screen
+    const sheet = document.getElementById('bottom-sheet');
+    if (id === 'screen-main') sheet.classList.remove('hidden');
+    else sheet.classList.add('hidden');
+  }
+  function goToMain() { showScreen('screen-main'); refreshMain(); }
+  function goToEdit(which) {
+    if (which === 'bil') openBilModal();
+    else if (which === 'pkg') openPkgModal();
+  }
+
+  function openModal(id) {
+    const m = document.getElementById(id);
+    m.classList.add('open');
+    m.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    const m = document.getElementById(id);
+    m.classList.remove('open');
+    m.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function openBilModal() {
+    // Reset radio selection to the saved value and pin "Current" chip to that row
+    document.querySelectorAll('#bil-options .radio-row').forEach(r => {
+      r.classList.toggle('selected', r.dataset.value === state.bilOriginal);
+      const existing = r.querySelector('.current-chip');
+      if (existing) existing.remove();
+    });
+    const origRow = [...document.querySelectorAll('#bil-options .radio-row')]
+      .find(r => r.dataset.value === state.bilOriginal);
+    if (origRow) {
+      const chip = document.createElement('span');
+      chip.className = 'chip current-chip';
+      chip.textContent = 'Current';
+      origRow.appendChild(chip);
+    }
+    document.getElementById('bil-save').classList.add('disabled');
+    document.getElementById('bil-alert').style.display = 'none';
+    openModal('bil-modal');
+  }
+  function closeBilModal() { closeModal('bil-modal'); }
+
+  function openPkgModal() {
+    state.pkg = state.pkgSaved;
+    document.querySelectorAll('#pkg-toggle .toggle-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.pkg === state.pkg);
+    });
+    renderPkg();
+    openModal('pkg-modal');
+  }
+  function closePkgModal() { closeModal('pkg-modal'); }
+
+  /* Discount panel */
+  function toggleDiscount(el) {
+    const r = el.parentElement;
+    const p = document.getElementById('discount-panel');
+    r.classList.toggle('open');
+    p.classList.toggle('open');
+  }
+
+  /* State */
+  const state = {
+    plan: 'popular',   // price | popular | superior | custom
+    bil: '$25K per person/$50K per accident',
+    bilOriginal: '$25K per person/$50K per accident',
+    bilSaved: false,
+    pkg: 'essential',
+    pkgSaved: 'essential',
+    extraPip: 'Option 1',
+    accidentForgiveness: false,
+    needsRecalc: false,
+    hasCustom: false,
+    customDelta: 0,
+    pendingFields: new Set(),
+  };
+
+  // Monthly-premium deltas per coverage choice (vs Most Popular baseline)
+  const bilDeltas = {
+    '$15K per person/$30K per accident': -5.00,
+    '$25K per person/$50K per accident': 0,
+    '$50K per person/$100K per accident': 6.25,
+    '$75K per person/$150K per accident': 12.48,
+    '$100K per person/$200K per accident': 20.00,
+    '$200K per person/$400K per accident': 32.00,
+  };
+  const pkgDeltas = { essential: 0, preferred: 20.00, premium: 50.00 };
+
+  const planPrices = {
+    price:    { monthly: '$98.42',  today: '$189.45', full: '$689.97', save: '$80.00',  total: '$738.47' },
+    popular:  { monthly: '$115.07', today: '$206.07', full: '$795.07', save: '$90.00',  total: '$875.00' },
+    superior: { monthly: '$130.15', today: '$221.15', full: '$901.90', save: '$100.00', total: '$981.00' },
+    custom:   { monthly: '$115.07', today: '$206.07', full: '$795.07', save: '$90.00',  total: '$875.00' },
+  };
+
+  function computeCustomPrices() {
+    const delta = (bilDeltas[state.bil] || 0) + (pkgDeltas[state.pkgSaved] || 0);
+    const base = planPrices.popular;
+    const num = s => parseFloat(s.replace(/[$,]/g, ''));
+    const fmt = n => '$' + n.toFixed(2);
+    const monthly = num(base.monthly) + delta;
+    const today = num(base.today) + delta;
+    const full = num(base.full) + delta * 6;
+    const save = num(base.save);
+    const total = full + save;
+    return {
+      delta,
+      plan: { monthly: fmt(monthly), today: fmt(today), full: fmt(full), save: fmt(save), total: fmt(total) },
+    };
+  }
+
+  const pkgData = {
+    essential: {
+      title: 'Essential Assurance ',
+      subtitle: 'Included with your policy',
+      chipIncluded: true,
+      priceLabel: '$0/mo',
+      pricePlus: null,
+      features: [
+        'Door-to-Door Valet Claims',
+        'Service®',
+        'Guaranteed Repairs',
+        'eDocuments & Reminders',
+        'Get Home Safe Taxi Ride',
+        'Online & Mobile Services',
+        'Pledge of Assurance',
+      ],
+    },
+    preferred: {
+      title: 'Preferred Assurance',
+      subtitle: 'Upgrade for extra savings and added protection',
+      chipIncluded: false,
+      priceLabel: '+$20/mo',
+      pricePlus: '+$20',
+      features: [
+        'Deductible Dollars',
+        'New Car Replacement',
+        'Plus One Car Replacement',
+        'Gap Coverage',
+        'Trip Interruption',
+        'Electronic Lock/Key Replacement',
+      ],
+    },
+    premium: {
+      title: 'Premium Assurance',
+      subtitle: 'Our most comprehensive coverage with premium perks',
+      chipIncluded: false,
+      priceLabel: '+$50/mo',
+      pricePlus: '+$50',
+      features: [
+        'Roadside Assistance',
+        'Glass Replacement',
+        'Waiver of Depreciation',
+        'Pet Injury Coverage',
+        'Additional Towing & Labor',
+        'Airbag (accidental discharge)',
+      ],
+    }
+  };
+
+  /* Main-page tab switching */
+  document.querySelectorAll('.tab-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.plan = btn.dataset.plan;
+      refreshMain();
+    });
+  });
+
+  /* Accident forgiveness toggle */
+  function toggleAccidentForgiveness() {
+    state.accidentForgiveness = !state.accidentForgiveness;
+    const btn = document.getElementById('af-btn');
+    if (state.accidentForgiveness) {
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Added';
+      btn.style.background = 'var(--primary-paper-1)';
+    } else {
+      btn.innerHTML = '<i class="fa-solid fa-plus"></i> Add';
+      btn.style.background = '#fff';
+    }
+  }
+
+  /* Main page refresh */
+  function refreshMain() {
+    // Show/hide Custom tab
+    const customTab = document.getElementById('tab-custom');
+    customTab.style.display = state.hasCustom ? '' : 'none';
+
+    // Price change alert (only while viewing Custom tier)
+    const alertEl = document.getElementById('price-alert');
+    const alertText = document.getElementById('price-alert-text');
+    if (state.hasCustom && state.plan === 'custom' && state.customDelta !== 0) {
+      const d = state.customDelta;
+      const amt = '$' + Math.abs(d).toFixed(2);
+      if (d > 0) {
+        alertEl.classList.remove('decrease');
+        alertText.textContent = `Your premium increased by ${amt}/month`;
+      } else {
+        alertEl.classList.add('decrease');
+        alertText.textContent = `Your premium decreased by ${amt}/month`;
+      }
+      alertEl.style.display = 'flex';
+    } else {
+      alertEl.style.display = 'none';
+    }
+
+    // highlight selected tab
+    document.querySelectorAll('.tab-pill').forEach(t => {
+      t.classList.toggle('active', t.dataset.plan === state.plan);
+    });
+    const p = planPrices[state.plan];
+    document.getElementById('price-big').textContent = p.monthly;
+    document.getElementById('price-total').textContent = `(Total of ${p.total.replace('$','')})`;
+    document.getElementById('price-intro').textContent = `Pay ${p.today} today then 5 monthly payments of`;
+    document.getElementById('price-save-amt').textContent = p.save;
+    document.getElementById('price-save-full').textContent = p.full;
+    document.getElementById('bs-price').textContent = p.monthly;
+
+    // Bodily injury value reflects current saved selection
+    const bilValue = document.getElementById('bil-value');
+    const bilPrice = document.getElementById('bil-price');
+    const shortVal = state.bil.split(' per ')[0].replace(' per person','') + '/' + state.bil.split('$')[2].split(' per ')[0];
+    bilValue.innerHTML = shortVal + ' <i class="fa-solid fa-chevron-right chev"></i>';
+    // Recompute BIL monthly price based on delta (from baseline $35/mo)
+    const bilMonthly = 35 + (bilDeltas[state.bil] || 0);
+    bilPrice.dataset.value = '$' + bilMonthly.toFixed(0) + '/mo';
+
+    // Update Extra PIP value display
+    const extraPipValEl = document.getElementById('extra-pip-value');
+    if (extraPipValEl) {
+      extraPipValEl.innerHTML = state.extraPip + ' <i class="fa-solid fa-chevron-right chev"></i>';
+    }
+
+    // Per-field Pending: only items whose field was edited show "Pending"
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const field = el.dataset.field;
+      if (state.pendingFields.has(field)) {
+        el.textContent = 'Pending';
+        el.classList.add('pending');
+      } else {
+        el.textContent = el.dataset.value || el.textContent;
+        el.classList.remove('pending');
+      }
+    });
+
+    // CTA copy + price color reflect whether any field is pending recalculation
+    const mainCta = document.getElementById('main-cta');
+    const bsCta = document.getElementById('bs-cta');
+    const bsAmount = document.getElementById('bs-price');
+    if (state.needsRecalc) {
+      mainCta.textContent = 'Recalculate my quote';
+      bsCta.textContent = 'Recalculate my quote';
+      document.getElementById('price-big').classList.remove('active');
+      if (bsAmount) bsAmount.classList.add('disabled');
+    } else {
+      mainCta.textContent = 'Continue with purchase';
+      bsCta.textContent = 'Continue with purchase';
+      document.getElementById('price-big').classList.add('active');
+      if (bsAmount) bsAmount.classList.remove('disabled');
+    }
+    mainCta.classList.remove('preview');
+    bsCta.classList.remove('preview');
+
+    // Package block
+    const pkg = pkgData[state.pkgSaved];
+    const linkText = pkg.title + (pkg.chipIncluded ? '| Included' : '');
+    document.getElementById('pkg-selected-name').innerHTML = linkText + ' <i class="fa-solid fa-chevron-right"></i>';
+    document.getElementById('pkg-selected-price').textContent = pkg.priceLabel;
+    document.getElementById('pkg-included-heading').textContent = pkg.title + (pkg.chipIncluded ? '| Included:' : ':');
+    const list = document.getElementById('pkg-feat-list');
+    list.innerHTML = pkg.features.map(f => `
+      <li>
+        <i class="fa-solid fa-check feat-check"></i>
+        <span class="feat-label">${f}</span>
+        <i class="fa-regular fa-circle-question feat-info" onclick="showToast('${f.replace(/'/g, '')}')"></i>
+      </li>
+    `).join('');
+  }
+
+  /* Bodily injury radio behavior */
+  document.querySelectorAll('#bil-options .radio-row').forEach(row => {
+    row.addEventListener('click', () => {
+      document.querySelectorAll('#bil-options .radio-row').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      const newVal = row.dataset.value;
+      const save = document.getElementById('bil-save');
+      const alert = document.getElementById('bil-alert');
+
+      // Save + alert only toggle based on whether selection differs.
+      // The "Current" chip remains pinned to bilOriginal at all times (added in openBilModal).
+      if (newVal !== state.bilOriginal) {
+        save.classList.remove('disabled');
+        alert.style.display = 'flex';
+      } else {
+        save.classList.add('disabled');
+        alert.style.display = 'none';
+      }
+    });
+  });
+
+  function saveBil() {
+    const sel = document.querySelector('#bil-options .radio-row.selected');
+    if (!sel || sel.dataset.value === state.bilOriginal) return;
+    state.bil = sel.dataset.value;
+    state.bilOriginal = sel.dataset.value;
+    state.bilSaved = true;
+    state.needsRecalc = true;
+    state.pendingFields.add('bil');
+    closeBilModal();
+    showToast('Bodily injury updated');
+    refreshMain();
+  }
+
+  /* Package toggle + features */
+  document.querySelectorAll('#pkg-toggle .toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#pkg-toggle .toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.pkg = btn.dataset.pkg;
+      renderPkg();
+    });
+  });
+
+  function renderPkg() {
+    const data = pkgData[state.pkg];
+    document.getElementById('pkg-title').textContent = data.title;
+    document.getElementById('pkg-subtitle').textContent = data.subtitle;
+    const priceInd = document.getElementById('pkg-price-indicator');
+    if (data.chipIncluded) {
+      priceInd.className = 'chip-included';
+      priceInd.innerHTML = '<i class="fa-solid fa-check"></i> Included';
+    } else {
+      priceInd.className = '';
+      priceInd.style.fontWeight = '700';
+      priceInd.textContent = data.pricePlus;
+    }
+    const feat = document.getElementById('pkg-features');
+    feat.innerHTML = data.features.map(f => `
+      <div class="kf-row">
+        <i class="fa-solid fa-check check"></i>
+        <span class="label">${f}</span>
+        <i class="fa-regular fa-circle-question info" onclick="showToast('${f.replace(/'/g, '')}')"></i>
+      </div>
+    `).join('');
+    const save = document.getElementById('pkg-save');
+    if (state.pkg === state.pkgSaved) {
+      save.classList.add('disabled');
+    } else {
+      save.classList.remove('disabled');
+    }
+  }
+
+  function savePkg() {
+    if (state.pkg === state.pkgSaved) return;
+    state.pkgSaved = state.pkg;
+    state.needsRecalc = true;
+    state.pendingFields.add('package');
+    closePkgModal();
+    showToast(pkgData[state.pkg].title.trim() + ' selected');
+    refreshMain();
+  }
+
+  /* Extra PIP editor */
+  const extraPipOptions = [
+    'Option 1','Option 2','Option 3','Option 4','Option 5','Option 6','Option 7','Option 8',
+    'Option 9','Option 10','Option 11','Option 12','Option 13','Option 14','Option 15','Option 16',
+    'No Extra PIP'
+  ];
+  let extraPipDraft = null;
+
+  function openExtraPipModal() {
+    const container = document.getElementById('extraPip-options');
+    extraPipDraft = state.extraPip;
+    container.innerHTML = extraPipOptions.map(opt => `
+      <label class="radio-row${opt === state.extraPip ? ' selected' : ''}" data-value="${opt}">
+        <span class="radio-dot"></span>
+        <span class="radio-label">${opt}</span>
+      </label>
+    `).join('');
+    container.querySelectorAll('.radio-row').forEach(row => {
+      row.addEventListener('click', () => {
+        container.querySelectorAll('.radio-row').forEach(r => r.classList.remove('selected'));
+        row.classList.add('selected');
+        extraPipDraft = row.dataset.value;
+        const save = document.getElementById('extraPip-save');
+        if (extraPipDraft !== state.extraPip) save.classList.remove('disabled');
+        else save.classList.add('disabled');
+      });
+    });
+    document.getElementById('extraPip-save').classList.add('disabled');
+    openModal('extraPip-modal');
+  }
+
+  function closeExtraPipModal() { closeModal('extraPip-modal'); }
+
+  function saveExtraPip() {
+    if (!extraPipDraft || extraPipDraft === state.extraPip) return;
+    state.extraPip = extraPipDraft;
+    state.pendingFields.add('extraPip');
+    state.needsRecalc = true;
+    closeExtraPipModal();
+    showToast('Extra PIP updated');
+    refreshMain();
+  }
+
+  function onContinue() {
+    if (state.needsRecalc) {
+      // Simulate quote recalculation
+      const cta = document.getElementById('main-cta');
+      const bsCta = document.getElementById('bs-cta');
+      cta.textContent = 'Recalculating…';
+      bsCta.textContent = 'Recalculating…';
+      cta.classList.add('disabled');
+      bsCta.classList.add('disabled');
+      setTimeout(() => {
+        // Build the Custom tier using current saved coverages
+        const { delta, plan } = computeCustomPrices();
+        planPrices.custom = plan;
+        state.customDelta = delta;
+        state.hasCustom = true;
+        state.plan = 'custom';
+        state.needsRecalc = false;
+        state.pendingFields.clear();
+        cta.classList.remove('disabled');
+        bsCta.classList.remove('disabled');
+        refreshMain();
+        // Take user back to the top so they see the new Custom tier + price change
+        const scrollEl = document.getElementById('screen-root');
+        if (scrollEl) scrollEl.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast('Quote updated');
+      }, 900);
+      return;
+    }
+    showToast('Continuing to purchase…');
+  }
+
+  // Initialize
+  refreshMain();
+</script>
+
+</body>
+</html>
