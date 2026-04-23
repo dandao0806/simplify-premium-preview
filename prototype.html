@@ -1607,9 +1607,8 @@
       }
     });
 
-    // CTA copy reflects whether any field is pending recalculation.
-    // Price color, however, only dims on the Custom tab while pending —
-    // other tiers show a stable, already-priced quote and should stay primary blue.
+    // When any edit is pending a recalc, the shown price is stale on every tab —
+    // dim it everywhere and swap the CTA to "Recalculate my quote".
     const mainCta = document.getElementById('main-cta');
     const bsCta = document.getElementById('bs-cta');
     const bsAmount = document.getElementById('bs-price');
@@ -1620,9 +1619,8 @@
       mainCta.textContent = 'Continue with purchase';
       bsCta.textContent = 'Continue with purchase';
     }
-    const priceDisabled = state.needsRecalc && state.plan === 'custom';
-    document.getElementById('price-big').classList.toggle('active', !priceDisabled);
-    if (bsAmount) bsAmount.classList.toggle('disabled', priceDisabled);
+    document.getElementById('price-big').classList.toggle('active', !state.needsRecalc);
+    if (bsAmount) bsAmount.classList.toggle('disabled', state.needsRecalc);
     mainCta.classList.remove('preview');
     bsCta.classList.remove('preview');
 
